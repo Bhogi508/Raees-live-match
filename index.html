@@ -1,46 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pakistan Match Update</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f5f5f5;
-      text-align: center;
-      padding: 50px;
-    }
-    h1 {
-      color: #27ae60;
-      font-size: 2rem;
-    }
-    p {
-      font-size: 1.2rem;
-      margin: 20px 0;
-    }
-    a.join-button {
-      display: inline-block;
-      background-color: #25D366;
-      color: white;
-      padding: 15px 30px;
-      font-size: 1.2rem;
-      border-radius: 10px;
-      text-decoration: none;
-      margin-top: 20px;
-      transition: background 0.3s;
-    }
-    a.join-button:hover {
-      background-color: #128C7E;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ghallu Live Match Viewer</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;900&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/artplayer/dist/artplayer.js"></script>
+
+<style>
+:root{
+    --primary:#00f5ff;
+    --bg:#0f172a;
+    --panel:#111827;
+    --border:#1f2937;
+    --text:#ffffff;
+    --sub:#94a3b8;
+}
+
+*{margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif;}
+body{background:var(--bg); color:var(--text);}
+
+/* HEADER */
+.header{
+    text-align:center;
+    padding:30px 20px;
+    background:#0b1220;
+    border-bottom:1px solid var(--border);
+}
+.brand{
+    font-family:'Orbitron';
+    font-size:2.3rem;
+    font-weight:900;
+    letter-spacing:2px;
+    color:var(--primary);
+}
+.sub{
+    font-size:0.9rem;
+    color:var(--sub);
+    letter-spacing:1px;
+}
+
+/* MATCH TITLE */
+.match-title{
+    text-align:center;
+    padding:15px;
+    background:var(--panel);
+    font-size:1rem;
+    font-weight:600;
+    letter-spacing:1px;
+}
+
+/* STATS */
+.stats{
+    text-align:center;
+    padding:10px;
+    font-size:.9rem;
+    color:var(--sub);
+}
+
+/* PLAYER */
+#player{
+    width:95%;
+    max-width:1100px;
+    margin:30px auto;
+    aspect-ratio:16/9;
+    border-radius:12px;
+    overflow:hidden;
+    border:1px solid var(--border);
+}
+
+/* FOOTER */
+.footer{
+    text-align:center;
+    padding:25px;
+    font-size:.8rem;
+    color:var(--sub);
+    border-top:1px solid var(--border);
+}
+</style>
 </head>
 <body>
-  <h1>Pakistan lost the match 😢</h1>
-  <p>Thanks for choosing us! For more updates, join our channel.<br>
-  Next match updates will be on this website.</p>
-  <a class="join-button" href="https://whatsapp.com/channel/0029VazVHQQCsU9JXsiHV529" target="_blank">
-    Join our WhatsApp Channel
-  </a>
+
+<div class="header">
+    <div class="brand">RAEES LIVE MATCH VIEWER</div>
+    <div class="sub">Ultra HD Streaming • Fast Server • No Ads</div>
+</div>
+
+<div class="match-title">
+    🏏 LIVE CRICKET MATCH STREAM
+</div>
+
+<div class="stats">
+    👁️ Live Viewers: <span id="online">20</span> |
+    🔥 Server Status: ONLINE
+</div>
+
+<div id="player"></div>
+
+<div class="footer">
+    © 2026 Raees Streaming Network <br>
+    Secure & Optimized Live Broadcast System
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const streamUrl = "https://cdn08khi.tamashaweb.com:8087/jazzauth/ICC-MEN-T20-abr/playlist.m3u8"
+
+    const art = new Artplayer({
+        container: '#player',
+        url: streamUrl,
+        autoplay: true,
+        autoSize: true,
+        fullscreen: true,
+        pip: true,
+        setting: true,
+        playbackRate: true,
+        aspectRatio: true,
+        controls: [
+            {
+                name: 'Server',
+                position: 'right',
+                html: 'HD',
+            }
+        ],
+        customType: {
+            m3u8: function (video, url) {
+                if (Hls.isSupported()) {
+                    const hls = new Hls();
+                    hls.loadSource(url);
+                    hls.attachMedia(video);
+                } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                    video.src = url;
+                }
+            }
+        }
+    });
+
+});
+
+// Disable right click
+document.addEventListener('contextmenu', e => e.preventDefault());
+
+// Fake live counter animation
+setInterval(()=>{
+    let count = document.getElementById("online");
+    let current = parseInt(count.innerText);
+    count.innerText = current + Math.floor(Math.random()*3);
+},15000);
+
+</script>
+
 </body>
 </html>
